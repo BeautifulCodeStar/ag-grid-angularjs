@@ -139,7 +139,7 @@ export class SecondGridApplicationComponent implements OnInit {
       .startEditingCell({rowIndex: rowIndex, colKey: colKey, rowPinned: pinned, keyPress: key, charPress: char});
       if (realRowIndex && realColkey) {
         const preValue = this.gridOptions.rowData[realRowIndex][realColkey];
-        if (preValue === 0) {
+        if (preValue === '') {
           this.gridOptions.rowData[realRowIndex][realColkey] = this.gridOptions.rowData[realRowIndex - 1][realColkey];
         }
         this.gridApi.redrawRows();

@@ -61,6 +61,7 @@ export class MyGridApplicationComponent implements OnInit {
             const colKey = event.colDef.field;
             const currentIndex = $this.headerCells.indexOf(colKey);
             const currentValue = $this.gridOptions.rowData[rowIndex][colKey];
+            console.log(key, keyCode)
             if (keyCode === 13) { // Enter
               if (currentIndex !== 0 && currentIndex !== 2) {
                 if ($this.gridOptions.rowData.length - 1 === rowIndex) {
@@ -138,7 +139,8 @@ export class MyGridApplicationComponent implements OnInit {
       .startEditingCell({rowIndex: rowIndex, colKey: colKey, rowPinned: pinned, keyPress: key, charPress: char});
       if (realRowIndex && realColkey) {
         const preValue = this.gridOptions.rowData[realRowIndex][realColkey];
-        if (preValue === 0) {
+        console.log('Prevalue:', preValue)
+        if (preValue === '') {
           this.gridOptions.rowData[realRowIndex][realColkey] = this.gridOptions.rowData[realRowIndex - 1][realColkey];
         }
         this.gridApi.redrawRows();
