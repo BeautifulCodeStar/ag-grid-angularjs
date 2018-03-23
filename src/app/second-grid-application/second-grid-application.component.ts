@@ -75,13 +75,11 @@ export class SecondGridApplicationComponent implements OnInit {
                 $this.onBtStartEditing(rowIndex, $this.headerCells[currentIndex + 1], 46, null, null, rowIndex, colKey);
               }
               return true;
-            } else if (keyCode === 111) { // Slash move focus to the next table
+            } else if (keyCode === 111 || keyCode === 191) { // Slash move focus to the next table
               $this.gridApi.stopEditing();
               $this.fireThird.emit(true);
               return true;
-            } else if ((keyCode === 106 || keyCode === 110) && currentIndex === 1) { // * or .
-              // $this.gridOptions.rowData[rowIndex][colKey] = 0;
-              // $this.gridApi.redrawRows();
+            } else if ((keyCode === 106 || keyCode === 110 || keyCode === 190 || keyCode === 56) && currentIndex === 1) { // * or .
               $this.onBtStartEditing(rowIndex, $this.headerCells[currentIndex + 1], null);
               return true;
             }
