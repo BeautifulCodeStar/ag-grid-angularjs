@@ -11,15 +11,15 @@ import {RedComponentComponent} from '../red-component/red-component.component';
 export class ForthGridApplicationComponent implements OnInit {
 
  @Output() fireFifth = new EventEmitter<boolean>();
-    private gridOptions: GridOptions;
-    private defaultColDef;
-    private gridApi: GridApi;
-    private gridColumnApi: ColumnApi;
-    private rowData: any[];
-    private headerCells = [
+     gridOptions: GridOptions;
+     defaultColDef;
+     gridApi: GridApi;
+     gridColumnApi: ColumnApi;
+     rowData: any[];
+     headerCells = [
       'number', 'amount', 'extraCmd', 'extraAmount'
     ];
-    private secondFlag: Boolean = false;
+     secondFlag: Boolean = false;
 
     constructor() {
       this.gridOptions = <GridOptions>{};

@@ -9,15 +9,15 @@ import {GridOptions, ColumnApi, GridApi} from 'ag-grid';
 export class ThirdGridApplicationComponent implements OnInit {
 
   @Output() fireForth = new EventEmitter<boolean>();
-    private gridOptions: GridOptions;
-    private defaultColDef;
-    private gridApi: GridApi;
-    private gridColumnApi: ColumnApi;
-    private rowData: any[];
-    private headerCells = [
+     gridOptions: GridOptions;
+     defaultColDef;
+     gridApi: GridApi;
+     gridColumnApi: ColumnApi;
+     rowData: any[];
+     headerCells = [
       'number', 'amount', 'extraCmd', 'extraAmount'
     ];
-    private secondFlag: Boolean = false;
+     secondFlag: Boolean = false;
 
     constructor() {
       this.gridOptions = <GridOptions>{};
