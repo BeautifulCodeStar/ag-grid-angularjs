@@ -108,11 +108,14 @@ export class ForthGridApplicationComponent implements OnInit {
       if (params.newValue.indexOf('.') !== -1) {
         params.newValue = params.newValue.replace('.', '');
       }
-      if (params.newValue.toString().length > 2) {
-        return Number(params.newValue.toString().substr(0, 2));
+      if (!isNaN(params.newValue)) {
+        if (params.newValue.toString().length > 3) {
+          return params.newValue.toString().substr(0, 3);
+        }
+        return params.newValue;
+      } else {
+        return '';
       }
-      console.log('newValue:', params.newValue);
-      return Number(params.newValue);
     }
 
     cellValueChanged(event) {

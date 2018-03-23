@@ -95,6 +95,7 @@ export class MyGridApplicationComponent implements OnInit {
       this.gridColumnApi = event.columnApi;
       this.gridApi.sizeColumnsToFit();
     }
+
     numberValueParser(params) {
       if (params.newValue.indexOf('/') !== -1) {
         params.newValue = params.newValue.replace('/', '');
@@ -105,11 +106,14 @@ export class MyGridApplicationComponent implements OnInit {
       if (params.newValue.indexOf('.') !== -1) {
         params.newValue = params.newValue.replace('.', '');
       }
-      if (params.newValue.toString().length > 3) {
-        return Number(params.newValue.toString().substr(0, 3));
+      if (!isNaN(params.newValue)) {
+        if (params.newValue.toString().length > 2) {
+          return params.newValue.toString().substr(0, 2);
+        }
+        return params.newValue;
+      } else {
+        return '';
       }
-      console.log('newValue:', params.newValue);
-      return Number(params.newValue);
     }
 
     cellValueChanged(event) {
