@@ -42,7 +42,6 @@ export class MyGridApplicationComponent implements OnInit {
         {
             headerName: 'Extra Amount',
             field: 'extraAmount',
-            valueParser : this.numberValueParser,
             width: 120
         }
       ];
@@ -61,7 +60,7 @@ export class MyGridApplicationComponent implements OnInit {
             const colKey = event.colDef.field;
             const currentIndex = $this.headerCells.indexOf(colKey);
             const currentValue = $this.gridOptions.rowData[rowIndex][colKey];
-            console.log(key, keyCode)
+            console.log(key, keyCode);
             if (keyCode === 13) { // Enter
               if (currentIndex !== 0 && currentIndex !== 2) {
                 if ($this.gridOptions.rowData.length - 1 === rowIndex) {
@@ -69,9 +68,9 @@ export class MyGridApplicationComponent implements OnInit {
                   $this.gridOptions.rowData.push(data);
                   $this.gridApi.updateRowData({add: [data]});
                 }
-                $this.onBtStartEditing(rowIndex + 1, $this.headerCells[0], 46, null, null, rowIndex, colKey);
+                $this.onBtStartEditing(rowIndex + 1, $this.headerCells[0], 46, null, null, null, rowIndex, colKey);
               } else {
-                $this.onBtStartEditing(rowIndex, $this.headerCells[currentIndex + 1], 46, null, null, rowIndex, colKey);
+                $this.onBtStartEditing(rowIndex, $this.headerCells[currentIndex + 1], 46, null, null, null, rowIndex, colKey);
               }
               return true;
             } else if (keyCode === 111 || keyCode === 191) { // Slash move focus to the next table
@@ -79,7 +78,7 @@ export class MyGridApplicationComponent implements OnInit {
               $this.fireSecond.emit(true);
               return true;
             } else if ((keyCode === 106 || keyCode === 110 || keyCode === 190 || keyCode === 56) && currentIndex === 1) { // * or .
-              $this.onBtStartEditing(rowIndex, $this.headerCells[currentIndex + 1], null);
+              $this.onBtStartEditing(rowIndex, $this.headerCells[currentIndex + 2], null, null, null, key, rowIndex, colKey);
               return true;
             }
           }
@@ -108,8 +107,8 @@ export class MyGridApplicationComponent implements OnInit {
         params.newValue = params.newValue.replace('.', '');
       }
       if (!isNaN(params.newValue)) {
-        if (params.newValue.toString().length > 2) {
-          return params.newValue.toString().substr(0, 2);
+        if (params.newValue.toString().length > 3) {
+          return params.newValue.toString().substr(0, 3);
         }
         return params.newValue;
       } else {
@@ -117,27 +116,23 @@ export class MyGridApplicationComponent implements OnInit {
       }
     }
 
-    cellValueChanged(event) {
-      // console.log(event)
-    }
-
     onFocus(event) {
       if (event.rowIndex) {
         const rowIndex = event.rowIndex;
         const headerName = event.column.colDef.headerName;
         const field = event.column.colDef.field;
-        this.gridApi.startEditingCell({rowIndex: rowIndex, colKey: field, rowPinned: null, keyPress: 46});
+        this.gridApi.startEditingCell({rowIndex: rowIndex, colKey: field, rowPinned: null});
       }
     }
 
-    onBtStartEditing(rowIndex, colKey, key, char = null, pinned = null, realRowIndex = null, realColkey = null) {
+    onBtStartEditing(rowIndex, colKey, key = null, char = null, pinned = null, type = null, realRowIndex = null, realColkey = null) {
       this
       .gridApi
       .setFocusedCell(rowIndex, colKey, '');
       this
       .gridApi
       .startEditingCell({rowIndex: rowIndex, colKey: colKey, rowPinned: pinned, keyPress: key, charPress: char});
-      if (realRowIndex && realColkey) {
+      if (realRowIndex && realColkey && !type) {
         const preValue = this.gridOptions.rowData[realRowIndex][realColkey];
         console.log('Prevalue:', preValue)
         if (preValue === '') {
@@ -145,17 +140,74 @@ export class MyGridApplicationComponent implements OnInit {
         }
         this.gridApi.redrawRows();
       }
+      if (type) {
+        this.gridOptions.rowData[realRowIndex]['extraCmd'] = type;
+        this.gridApi.redrawRows();
+        const that = this;
+        setTimeout(() => {
+          that
+          .gridApi
+          .startEditingCell({rowIndex: rowIndex, colKey: colKey, keyPress: 46});
+        }, 50);
+      }
       return true;
     }
 
-    setFocus(event) {
-      this.gridOptions.rowData[0]['number'] = 0;
-      this.gridApi.redrawRows();
-      this
-        .gridApi
-        .startEditingCell({rowIndex: 0, colKey: 'number', rowPinned: null, keyPress: 46, charPress: ''});
+    keyUp(event) {
+      const current = this.gridApi.getEditingCells();
+      console.log(current);
+      if (current && current.length > 0) {
+        const rowIndex = current[0]['rowIndex'];
+        const colKey = current[0]['column']['colId'];
+        const keyCode = event.keyCode;
+        const currentIndex = this.headerCells.indexOf(colKey);
+        if (keyCode === 37 && !(rowIndex === 0 && colKey === 'number')) { // for left key
+          if (rowIndex !== 0 && colKey === 'number') {
+            this
+          .onBtStartEditing(rowIndex - 1, this.headerCells[3]);
+          } else {
+            this
+            .onBtStartEditing(rowIndex, this.headerCells[currentIndex - 1]);
+          }
+        } else if (keyCode === 38 && rowIndex !== 0) { // for up key
+          this
+          .onBtStartEditing(rowIndex - 1, colKey);
+        } else if (keyCode === 39) { // for right key
+          if (this.gridOptions.rowData.length - 1 <= rowIndex && colKey === 'extraAmount') {
+            return false;
+          } else if (colKey === 'extraAmount') {
+            this
+            .onBtStartEditing(rowIndex + 1, this.headerCells[0]);
+            return true;
+          }
+          this
+          .onBtStartEditing(rowIndex, this.headerCells[currentIndex + 1]);
+        } else if (keyCode === 40) { // for down key
+          if (this.gridOptions.rowData.length - 1 <= rowIndex) {
+            return false;
+          }
+          this
+          .onBtStartEditing(rowIndex + 1, colKey);
+        }
+      }
     }
 
+    setFocus(event) {
+      const data = {number: '', amount: '', extraCmd: '', extraAmount: ''};
+      this.gridOptions.rowData.push(data);
+      this.gridApi.updateRowData({add: [data]});
+      const rowIndex = this.gridOptions.rowData.length - 1;
+      this
+        .gridApi
+        .startEditingCell({rowIndex: rowIndex, colKey: 'number', rowPinned: null, keyPress: 46, charPress: ''});
+      this.gridApi.redrawRows();
+      const that = this;
+        setTimeout(() => {
+          that
+          .gridApi
+          .startEditingCell({rowIndex: rowIndex, colKey: 'number', keyPress: 46});
+        }, 50);
+    }
 
 }
 

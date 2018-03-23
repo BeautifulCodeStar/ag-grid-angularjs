@@ -4,7 +4,7 @@
        [singleClickEdit]="true"
        (cellFocused)="onFocus($event)"
        [stopEditingWhenGridLosesFocus]="true"
+       (keyup)="keyUp($event)"
        [defaultColDef]="defaultColDef"
-       (cellValueChanged)="cellValueChanged($event)"
 			>
     </ag-grid-angular>
