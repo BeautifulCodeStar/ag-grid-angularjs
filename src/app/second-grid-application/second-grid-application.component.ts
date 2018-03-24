@@ -66,7 +66,7 @@ export class SecondGridApplicationComponent implements OnInit {
             if (keyCode === 13) { // Enter
               if (currentIndex !== 0 && currentIndex !== 2) {
                 if ($this.gridOptions.rowData.length - 1 === rowIndex) {
-                  const data = {number: 0, amount: 0, extraCmd: '', extraAmount: 0};
+                  const data = {number: '', amount: '', extraCmd: '', extraAmount: ''};
                   $this.gridOptions.rowData.push(data);
                   $this.gridApi.updateRowData({add: [data]});
                 }
