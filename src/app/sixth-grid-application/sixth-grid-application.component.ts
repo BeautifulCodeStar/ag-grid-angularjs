@@ -194,10 +194,14 @@ export class SixthGridApplicationComponent implements OnInit {
     }
 
     setFocus(event) {
-      const data = {number: '', amount: '', extraCmd: '', extraAmount: ''};
-      this.gridOptions.rowData.push(data);
-      this.gridApi.updateRowData({add: [data]});
-      const rowIndex = this.gridOptions.rowData.length - 1;
+      let rowIndex = this.gridOptions.rowData.length;
+      const row = this.gridApi.getDisplayedRowAtIndex(rowIndex - 1);
+      if (row && row.data.number !== "") {
+        const data = {number: '', amount: '', extraCmd: '', extraAmount: ''};
+        this.gridOptions.rowData.push(data);
+        this.gridApi.updateRowData({add: [data]});
+      }
+      rowIndex = this.gridOptions.rowData.length - 1;
       this
         .gridApi
         .startEditingCell({rowIndex: rowIndex, colKey: 'number', rowPinned: null, keyPress: 46, charPress: ''});

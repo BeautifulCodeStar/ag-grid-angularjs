@@ -1,8 +1,8 @@
 <div class="row">
-  <div class="col-md-2 col-sm-6">
+  <div class="col-md-3 col-sm-6">
     <app-my-grid-application #first (fireSecond)="second.setFocus()"></app-my-grid-application>
   </div>
-  <div class="col-md-offset-2 col-md-2 col-sm-6">
+  <div class="col-md-offset-3 col-md-2 col-sm-6">
     <app-second-grid-application #second (fireThird)="third.setFocus()"></app-second-grid-application>
   </div>
   <div class="col-md-offset-2 col-md-2 col-sm-6">
@@ -11,10 +11,10 @@
   <div class="col-md-offset-2 col-md-2 col-sm-6">
     <app-forth-grid-application #forth (fireFifth)="fifth.setFocus()"></app-forth-grid-application>
   </div>
-  <div class="col-md-offset-2 col-md-2 col-sm-6">
+  <div class="col-md-offset-2 col-md-3 col-sm-6">
     <app-fifth-grid-application #fifth (fireSixth)="sixth.setFocus()"></app-fifth-grid-application>
   </div>
-  <div class="col-md-offset-2 col-md-2 col-sm-6">
+  <!-- <div class="col-md-offset-2 col-md-2 col-sm-6">
     <app-sixth-grid-application #sixth (fireFirst)="first.setFocus()"></app-sixth-grid-application>
-  </div>
+  </div> -->
 </div>
