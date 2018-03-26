@@ -31,7 +31,6 @@ export class MyGridApplicationComponent implements OnInit {
         {
             headerName: 'Amount',
             field: 'amount',
-            valueParser : this.numberValueParser,
             width: 100
         },
         {
