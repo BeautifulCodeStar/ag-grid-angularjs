@@ -34,16 +34,6 @@ export class SixthGridApplicationComponent implements OnInit {
             field: 'amount',
             valueParser : this.numberValueParser,
             width: 100
-        },
-        {
-            headerName: 'ExtraCMD',
-            field: 'extraCmd',
-            width: 100,
-        },
-        {
-            headerName: 'Extra Amount',
-            field: 'extraAmount',
-            width: 120
         }
       ];
       this.gridOptions.rowData = [
@@ -77,9 +67,6 @@ export class SixthGridApplicationComponent implements OnInit {
             } else if (keyCode === 111 || keyCode === 191) { // Slash move focus to the next table
               $this.gridApi.stopEditing();
               $this.fireFirst.emit(true);
-              return true;
-            } else if ((keyCode === 106 || keyCode === 110 || keyCode === 190 || keyCode === 56) && currentIndex === 1) { // * or .
-              $this.onBtStartEditing(rowIndex, $this.headerCells[currentIndex + 2], null, null, null, key, rowIndex, colKey);
               return true;
             }
           }
@@ -174,9 +161,9 @@ export class SixthGridApplicationComponent implements OnInit {
           this
           .onBtStartEditing(rowIndex - 1, colKey);
         } else if (keyCode === 39) { // for right key
-          if (this.gridOptions.rowData.length - 1 <= rowIndex && colKey === 'extraAmount') {
+          if (this.gridOptions.rowData.length - 1 <= rowIndex && colKey === 'amount') {
             return false;
-          } else if (colKey === 'extraAmount') {
+          } else if (colKey === 'amount') {
             this
             .onBtStartEditing(rowIndex + 1, this.headerCells[0]);
             return true;
